@@ -2,3 +2,4 @@ gpt/openai_key.txt
 .idea/
 chatbot_backend/__pycache__/
 chatbot_backend/.idea/
+chatbot_backend/db_config.py
