@@ -13,18 +13,26 @@ pip install drf-extensions
 `POST`
 * request body
 username/email and passwords in string types
-`{"username": "<can be either a username or a email>", "password": "..."}`
+```shell
+{"username": "<can be either a username or a email>", "password": "..."}
+```
 * response body
 refresh and access tokens in string types if success
-`{"refresh": "...", "access": "..."}`
+```shell
+{"refresh": "...", "access": "..."}
+```
 or if the username/password is wrong:
-`{"detail": "No active account found with the given credentials"}`
+```shell
+{"detail": "No active account found with the given credentials"}
+```
 ### register/
 * method
 `POST`
 * request body
 username, passwords and email(optional) in string types
-`{"username": "...", "password": "...", ["email": "..."]}`
+```shell
+{"username": "...", "password": "...", ["email": "..."]}
+```
 * response body
 ```shell
 {
@@ -38,7 +46,9 @@ username, passwords and email(optional) in string types
 }
 ```
 or if the username already exists:
+```shell
 {"username": ["A user with that username already exists."]}
+```
 ### users/users/\<id\>/
 * method
 `GET`
