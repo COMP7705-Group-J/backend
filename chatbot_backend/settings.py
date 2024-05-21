@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-rdh85v77eg(e+i!4-)8a&s=n(l8ne0m=hl2#9o2blr6i-_d0cr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +87,13 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'users.MyUser'
+
+AUTHENTICATION_BACKENDS = {
+    'users.views.CustomBackend',
+}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -136,5 +146,35 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'utils.custom_execption.custom_exception_handler',
+    # 'EXCEPTION_HANDLER': 'utils.custom_execption.custom_exception_handler',
+        
+    # default filter backend
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    # RDF token
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',  # JWT auth deprached
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT auth
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema', # just in case
+    
+    # JWT configuration, may be deprecated because this is for rest_framework_jwt
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),  # expire time
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',  # token prefix
+    'JWT_ALLOW_REFRESH': False,  # forbid refresh token
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'users.jwt_utils.jwt_response_payload_handler', # auth response
+}
+
+# SIMPLE JWT configuration
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),  # Access Token expire time
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),  # Refresh Token expire time
+}
+
+REST_FRAMEWORK_EXTENSIONS = {
+    # cache time s
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60,
+    # cache
+    'DEFAULT_USE_CACHE': 'default',
 }
