@@ -1,5 +1,11 @@
 # backend
 
+## install
+pip install django\
+pip install djangorestframework\
+pip install pymysql\
+pip install openai
+
 ## chat 模块
 URL:localhost:port/chat/history\
 method:GET\
