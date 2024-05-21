@@ -12,11 +12,13 @@ pip install drf-extensions
 * method
 `POST`
 * request body
+
 username/email and passwords in string types
 ```shell
-{"username": "<can be either a username or a email>", "password": "..."}
+{"username": "<can be either a username or an email>", "password": "..."}
 ```
 * response body
+
 refresh and access tokens in string types if success
 ```shell
 {"refresh": "...", "access": "..."}
@@ -25,10 +27,11 @@ or if the username/password is wrong:
 ```shell
 {"detail": "No active account found with the given credentials"}
 ```
-### register/
+### users/register/
 * method
 `POST`
 * request body
+
 username, passwords and email(optional) in string types
 ```shell
 {"username": "...", "password": "...", ["email": "..."]}
@@ -52,6 +55,7 @@ or if the username already exists:
 ### users/users/\<id\>/
 * method
 `GET`
+
 this is a test for the token login, there are some issues to be fixed at present
 
 
