@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('login/', obtain_jwt_token),  # obtain JWT token, deprecated
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # obtain JWT token
-    path('users/', include('users.urls'))
+    path('users/', include('users.urls')),
     #path('admin/', admin.site.urls),
     path('chat/', include("chat.urls")),
 ]
