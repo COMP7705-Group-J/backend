@@ -28,15 +28,51 @@ local_database = {
 
 
 ## chat 模块
-URL: localhost:port/chat/history\
-method: GET\
-para: user_id(int), chatbot_id(int)\
-response: 当前用户和当前机器人聊天历史记录, json, 列表(content,by_user(bool),timestamp)
+* URL: localhost:port/chat/history
+* method: GET
+* parameter: 
+  ```json
+  {
+  		"user_id": 1,
+  		"chatbot_id": 1,
+  }
+  ```
+* response: 
+    ```json
+  {
+  		"data":[
+            [
+                "content":"...",
+  		        "by_user": 1, # bool
+                "timestamp": "2024-05-21T15:53:25"
+            ],
+            [
+                "content":"...",
+  		        "by_user": 0,
+                "timestamp": "2024-05-21T15:53:25"
+            ],
+            ...
+        ]
+  }
+  ```
 
-URL:localhost:port/chat/new_chat\
-method:GET\
-para:user_id(int),chatbot_id(int),input(string? I guess)\
-response:预期是ai的输出，json
+* URL: localhost:port/chat/new_chat
+* method: GET
+* parameter:
+  ```json
+  {
+  		"user_id": 1,
+  		"chatbot_id": 1,
+  		"input": "replace with user input"
+  }
+  ```
+* response:
+  ```json
+  {
+  		"data": "replace with openai output"
+  }
+  ```
+
 
 ## bot模块（草稿）
 

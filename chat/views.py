@@ -14,6 +14,7 @@ def loadhistory(request):
 
 def newchat(request):
     # todo:加下filter或者其他的东西避免注入
+    # 5/22 update:真的有必要吗，这个玩意好像就是参数化了
     input = request.GET.get("input")
     user_id = request.GET.get("user_id")
     chatbot_id = request.GET.get("chatbot_id")
