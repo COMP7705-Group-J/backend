@@ -28,6 +28,7 @@ local_database = {
 
 
 ## chat 模块
+### 历史记录
 * URL: localhost:port/chat/history
 * method: GET
 * parameter: 
@@ -56,6 +57,7 @@ local_database = {
   }
   ```
 
+### chat list
 * URL: localhost:port/chat/list
 * method: GET
 * parameter: 
@@ -83,6 +85,8 @@ local_database = {
   }
   ```
 
+
+### 发送当前聊天内容至机器人
 * URL: localhost:port/chat/new_chat
 * method: GET
 * parameter:
