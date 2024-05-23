@@ -43,16 +43,43 @@ local_database = {
   		"data":[
             [
                 "content":"...",
-  		        "by_user": 1, # bool
+                "by_user": 1, # bool
                 "timestamp": "2024-05-21T15:53:25"
             ],
             [
                 "content":"...",
-  		        "by_user": 0,
+                "by_user": 0,
                 "timestamp": "2024-05-21T15:53:25"
             ],
             ...
         ]
+  }
+  ```
+
+* URL: localhost:port/chat/list
+* method: GET
+* parameter: 
+  ```json
+  {
+  		"user_id": 1,
+  }
+  ```
+* response: 
+    ```json
+  {
+      "data": [
+            [
+              "chatbot_id": 2, 
+              "timestamp": "2024-05-23T16:44:55", 
+              "content": "test data3" #这里会返回最新的来自每个bot的输出
+            ], 
+            [
+              "chatbot_id": 1,
+              "timestamp": "2024-05-23T16:44:53",
+              "content": "test data1"
+            ],
+            ...
+          ]
   }
   ```
 

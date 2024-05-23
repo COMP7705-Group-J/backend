@@ -3,6 +3,18 @@ from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.db import connection
 # Create your views here.
 
+def list_chat(request):
+    user_id = request.GET.get("user_id")
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT chatbot_id, create_at, content\
+                        FROM (\
+                            SELECT chatbot_id, create_at, content, ROW_NUMBER() OVER (PARTITION BY chatbot_id ORDER BY create_at DESC) AS rn\
+                            FROM Chat_history WHERE user_id = %s\
+                            ) AS subquery\
+                        WHERE rn = 1 ORDER BY create_at DESC", [user_id])
+        row = cursor.fetchall()
+    return JsonResponse({"data":row})
+
 def loadhistory(request):
     user_id = request.GET.get("user_id")
     chatbot_id = request.GET.get("chatbot_id")
