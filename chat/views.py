@@ -31,9 +31,9 @@ def newchat(request):
     user_id = request.GET.get("user_id")
     chatbot_id = request.GET.get("chatbot_id")
     with connection.cursor() as cursor:
-        cursor.execute("insert into chat_history values (%s,%s,NOW(),%s, 1);", [user_id,chatbot_id,input])
+        cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 1);", [user_id,chatbot_id,input])
     # todo:丢到模型里产生输出
     output = "replace with openai output"
     with connection.cursor() as cursor:
-        cursor.execute("insert into chat_history values (%s,%s,NOW(),%s, 0);", [user_id,chatbot_id,output])
+        cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id,chatbot_id,output])
     return JsonResponse({"data":output})
