@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'utils.custom_execption.custom_exception_handler',
+    # 'EXCEPTION_HANDLER': 'utils.custom_execption.custom_exception_handler',
         
     # default filter backend
     'DEFAULT_FILTER_BACKENDS': (

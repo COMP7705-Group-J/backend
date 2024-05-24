@@ -242,36 +242,36 @@ local_database = {
 
 ## User模块
 
-### login/
+### login/ - 用户登录
 * method
 `POST`
 * request body
 
 username/email and passwords in string types
-```shell
+```json
 {"username": "<can be either a username or an email>", "password": "..."}
 ```
 * response body
 
 refresh and access tokens in string types if success
-```shell
+```json
 {"refresh": "...", "access": "..."}
 ```
 or if the username/password is wrong:
-```shell
+```json
 {"detail": "No active account found with the given credentials"}
 ```
-### users/register/
+### users/register/  - 用户注册
 * method
 `POST`
 * request body
 
 username, passwords and email(optional) in string types
-```shell
+```json
 {"username": "...", "password": "...", ["email": "..."]}
 ```
 * response body
-```shell
+```json
 {
     "code": 201,
     "msg": "OK",
@@ -283,12 +283,50 @@ username, passwords and email(optional) in string types
 }
 ```
 or if the username already exists:
-```shell
+```json
 {"username": ["A user with that username already exists."]}
 ```
-### users/users/\<id\>/
+### users/users/\<id\>/ - 更改第\<id\>个用户的信息(待重写)
 * method
-`GET`
+`PATCH`
+* request header plus:
+```shell
+key = Authorization
+value = "Bearer" + " " + access_token   #access token from the return of login/
+```
+* request body:
+```json
+{
+    "username": "...",
+    "password": "...",
+    "email": "..."
+}
+```
+* response body
+```json
+{
+    "code": 200,
+    "msg": "OK",
+    "data": {
+        "username": "...",
+        "email": "..."
+    }
+}
+```
+or if the token is invalid or expired:
+```json
+{
+    "detail": "Given token not valid for any token type",
+    "code": "token_not_valid",
+    "messages": [
+        {
+            "token_class": "AccessToken",
+            "token_type": "access",
+            "message": "Token is invalid or expired"
+        }
+    ]
+}
+```
 
 this is a test for the token login, there are some issues to be fixed at present
 
