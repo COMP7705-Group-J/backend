@@ -1,5 +1,5 @@
-delete from user;
+delete from User;
 
-delete from chatbot;
+delete from ChatBot;
 
-delete from chat_history;
+delete from Chat_history;
