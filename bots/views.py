@@ -28,7 +28,7 @@ def create(request):
     try:
         with connection.cursor() as cursor:
             cursor.execute(
-                "insert into chatbot values (%s, %s, %s, %s, %s, NOW(),%s);", [user_id, chatbot_id, chatbot_name,
+                "insert into ChatBot values (%s, %s, %s, %s, %s, NOW(),%s);", [user_id, chatbot_id, chatbot_name,
                                                                                chatbot_type, chatbot_persona,
                                                                                is_deleted])
             data.append({"chatbot_id": chatbot_id})
@@ -59,7 +59,7 @@ def detail(request):
     data = []
     try:
         with connection.cursor() as cursor:
-            cursor.execute("select * from chatbot where user_id=%s and chatbot_id=%s and is_deleted=0;",
+            cursor.execute("select * from ChatBot where user_id=%s and chatbot_id=%s and is_deleted=0;",
                            [user_id, chatbot_id])
             result = cursor.fetchall()
             if len(result) > 0:
@@ -93,7 +93,7 @@ def list(request):
     data = []
     try:
         with connection.cursor() as cursor:
-            cursor.execute("select * from chatbot where user_id=%s and is_deleted=0 order by create_at;",
+            cursor.execute("select * from ChatBot where user_id=%s and is_deleted=0 order by create_at;",
                            [user_id])
             result = cursor.fetchall()
             if len(result) > 0:
@@ -129,14 +129,14 @@ def delete(request):
     data = []
     try:
         with connection.cursor() as cursor:
-            cursor.execute("select * from chatbot where user_id=%s and chatbot_id=%s and is_deleted=0;",
+            cursor.execute("select * from ChatBot where user_id=%s and chatbot_id=%s and is_deleted=0;",
                            [user_id, chatbot_id])
             result = cursor.fetchall()
             if len(result) == 0:
                 code = -1
                 msg = "ChatbotNotFound"
             else:
-                cursor.execute("update chatbot set is_deleted=1 where user_id=%s and chatbot_id=%s;",
+                cursor.execute("update ChatBot set is_deleted=1 where user_id=%s and chatbot_id=%s;",
                                [user_id, chatbot_id])
 
     except Exception as e:
