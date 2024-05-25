@@ -106,7 +106,7 @@ local_database = {
   {
       "code": 200,#暂定，未处理openai的api中可能的错误
       "msg": "ok",
-  		"data": "replace with openai output"
+      "data": "replace with openai output"
   }
   ```
 
