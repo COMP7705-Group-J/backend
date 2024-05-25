@@ -1,4 +1,4 @@
-gpt/openai_key.txt
+openai_key.txt
 .idea/
 chatbot_backend/__pycache__/
 chat/__pycache__/
