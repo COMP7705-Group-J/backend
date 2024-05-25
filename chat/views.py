@@ -41,9 +41,9 @@ def loadhistory(request):
 def newchat(request):
     # todo:加下filter或者其他的东西避免注入
     # 5/22 update:真的有必要吗，这个玩意好像就是参数化了
-    input = request.GET.get("input")
-    user_id = request.GET.get("user_id")
-    chatbot_id = request.GET.get("chatbot_id")  
+    input = request.POST.get("input")
+    user_id = request.POST.get("user_id")
+    chatbot_id = request.POST.get("chatbot_id")  
     with connection.cursor() as cursor:
         cursor.execute("select content, by_user, create_at from Chat_history where user_id = %s and chatbot_id = %s Order By create_at", [user_id,chatbot_id])
         row = cursor.fetchall()
