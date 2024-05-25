@@ -41,6 +41,8 @@ local_database = {
 * response: 
     ```json
   {
+      "code": 200,
+      "msg": "ok",
   		"data":[
             [
                 "content":"...",
@@ -69,6 +71,8 @@ local_database = {
 * response: 
     ```json
   {
+      "code": 200,
+      "msg": "ok",
       "data": [
             [
               "chatbot_id": 2, 
@@ -88,7 +92,7 @@ local_database = {
 
 ### 发送当前聊天内容至机器人
 * URL: localhost:port/chat/new_chat
-* method: GET
+* method: POST
 * parameter:
   ```json
   {
@@ -100,6 +104,8 @@ local_database = {
 * response:
   ```json
   {
+      "code": 200,#暂定，未处理openai的api中可能的错误
+      "msg": "ok",
   		"data": "replace with openai output"
   }
   ```
