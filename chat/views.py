@@ -4,6 +4,10 @@ from django.db import connection
 import openai
 # Create your views here.
 
+def get_api_key():
+    with open("openai_key.txt", "r", encoding="utf-8") as fin:
+        return fin.readline().strip().replace("/n", "")
+
 def list_chat(request):
     user_id = request.GET.get("user_id")
     with connection.cursor() as cursor:
@@ -36,7 +40,7 @@ def newchat(request):
     # todo:丢到模型里产生输出
     output = "replace with openai output"
 
-    openai.api_key = "YOUR_API_KEY"
+    openai.api_key = get_api_key()
 
     prompt = "User: {}\nChatGPT: ".format(input)
 
