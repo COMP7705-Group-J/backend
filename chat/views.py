@@ -45,7 +45,7 @@ def newchat(request):
     client = OpenAI(api_key=api_key)
 
     prompt = "User: {}\nChatGPT: ".format(input)
-    history_chat = {"role": "user", "content": prompt}
+    history_chat = [{"role": "user", "content": prompt}]
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
