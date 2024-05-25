@@ -53,7 +53,7 @@ def newchat(request):
         messages=history_chat
     )
 
-    output = response.choices[0].text.strip()
+    output = response.choices[0].message.content
 
     with connection.cursor() as cursor:
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id, chatbot_id, output])
