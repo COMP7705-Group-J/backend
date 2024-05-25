@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.db import connection
 import openai
+from openai import OpenAI
 # Create your views here.
 
 def get_api_key():
@@ -40,11 +41,12 @@ def newchat(request):
     # todo:丢到模型里产生输出
     output = "replace with openai output"
 
-    openai.api_key = get_api_key()
+    api_key = get_api_key()
+    client = OpenAI(api_key=api_key)
 
     prompt = "User: {}\nChatGPT: ".format(input)
 
-    response = openai.Completion.create(
+    response = client.chat.Completion.create(
         model="gpt-3.5-turbo-0125",
         seed=1,
         messages=prompt
