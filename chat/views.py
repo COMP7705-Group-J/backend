@@ -14,12 +14,12 @@ def list_chat(request):
     with connection.cursor() as cursor:
         cursor.execute("Select chatbot_id, chatbot_name, create_at, content\
                         From (\
-                            Select Chat_history.chatbot_id, Chatbot.chatbot_name, Chat_history.create_at, Chat_history.content, ROW_NUMBER() \
+                            Select Chat_history.chatbot_id, ChatBot.chatbot_name, Chat_history.create_at, Chat_history.content, ROW_NUMBER() \
                                 Over (Partition By Chat_history.chatbot_id Order By Chat_history.create_at Desc) As rn\
                             From Chat_history \
-                            Left Join Chatbot\
-                            On Chat_history.chatbot_id = Chatbot.chatbot_id\
-                            Where Chat_history.user_id = %s And Chatbot.is_deleted = False\
+                            Left Join ChatBot\
+                            On Chat_history.chatbot_id = ChatBot.chatbot_id\
+                            Where Chat_history.user_id = %s And ChatBot.is_deleted = False\
                             ) As subquery\
                         Where rn = 1 Order By create_at Desc", [user_id])
         row = cursor.fetchall()
