@@ -46,7 +46,7 @@ def newchat(request):
 
     prompt = "User: {}\nChatGPT: ".format(input)
 
-    response = client.chat.Completion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
         seed=1,
         messages=prompt
