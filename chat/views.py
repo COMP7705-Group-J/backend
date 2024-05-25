@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.db import connection
+import openai
 # Create your views here.
 
 def list_chat(request):
@@ -34,6 +35,20 @@ def newchat(request):
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 1);", [user_id,chatbot_id,input])
     # todo:丢到模型里产生输出
     output = "replace with openai output"
+
+    openai.api_key = "YOUR_API_KEY"
+
+    prompt = "User: {}\nChatGPT: ".format(input)
+
+    response = openai.Completion.create(
+        model="gpt-3.5-turbo-0125",
+        seed=1,
+        messages=prompt
+    )
+
+    output = response.choices[0].text.strip()
+
     with connection.cursor() as cursor:
-        cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id,chatbot_id,output])
-    return JsonResponse({"data":output})
+        cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id, chatbot_id, output])
+
+    return JsonResponse({"data": output})
