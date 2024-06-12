@@ -2,6 +2,7 @@ import re
 from pyexpat import model
 from rest_framework import serializers
 from .models import MyUser
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class MyUserRegSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,3 +35,23 @@ class MyUserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model=MyUser
         fields=('username', 'email')
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        return token
+    
+    def validate(self, attrs):
+        old_data = super().validate(attrs)
+        data = {
+            'code': 200,
+            'msg': 'OK',
+            'username': self.user.username,
+            'email': self.user.email,
+            'access': old_data['access'],
+            'refresh': old_data['refresh']
+        }
+        return data
+    

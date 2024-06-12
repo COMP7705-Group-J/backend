@@ -165,6 +165,8 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),  # Access Token expire time
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),  # Refresh Token expire time
+
+    "TOKEN_OBTAIN_SERIALIZER": "users.serializer.MyTokenObtainPairSerializer",
 }
 
 REST_FRAMEWORK_EXTENSIONS = {

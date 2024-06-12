@@ -259,9 +259,16 @@ username/email and passwords in string types
 ```
 * response body
 
-refresh and access tokens in string types if success
+username, email, refresh and access tokens in string types if success
 ```json
-{"refresh": "...", "access": "..."}
+{
+    "code": 200,
+    "msg": "OK",
+    "username": "...",
+    "email": "...",
+    "access": "...",
+    "refresh": "..."
+}
 ```
 or if the username/password is wrong:
 ```json
