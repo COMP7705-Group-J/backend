@@ -5,6 +5,11 @@ import openai
 from openai import OpenAI
 # Create your views here.
 
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 def get_api_key():
     with open("openai_key.txt", "r", encoding="utf-8") as fin:
         return fin.readline().strip().replace("/n", "")
@@ -37,7 +42,9 @@ def loadhistory(request):
                          "msg":"ok",
                          "data":row})
 
-
+# @api_view(['POST'])
+# @authentication_classes([JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def newchat(request):
     # todo:加下filter或者其他的东西避免注入
     # 5/22 update:真的有必要吗，这个玩意好像就是参数化了
