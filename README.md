@@ -324,20 +324,25 @@ or if the username already exists:
 ```json
 {"username": ["A user with that username already exists."]}
 ```
-### users/users/\<id\>/ - 更改第\<id\>个用户的信息(待重写)
+### users/users/\<id\>/ - 获取/更改第\<id\>个用户的信息
 * method
-`PATCH`
+
+`GET` to retrieve the user's information
+
+`PATCH` or `PUT` to update the information
 * request header plus:
 ```shell
 key = Authorization
-value = "Bearer" + " " + access_token   #access token from the return of login/
+value = "Bearer" + " " + access_token   # access token from the return of login/
 ```
 * request body:
 ```json
+# all optional, you can provide only the information that needs to update, for example, only the username
+# Note: if the method is "GET", this request body will be ignored
 {
-    "username": "...",
-    "password": "...",
-    "email": "..."
+    "username": "...", # new username
+    ["password": "...",
+    "email": "..."]    
 }
 ```
 * response body
