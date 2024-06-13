@@ -6,4 +6,5 @@ urlpatterns = [
     path('detail', views.detail),
     path('list', views.list),
     path('delete', views.delete),
+    path('get_persona', views.get_persona),
 ]

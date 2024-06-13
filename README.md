@@ -111,7 +111,31 @@ local_database = {
   ```
 
 
-## bot模块（草稿）
+## bot模块
+
+### bots/get_persona - 请求定制化机器人的性格设定
+
+* 请求方法：GET
+
+* 请求参数：
+
+  ```
+  {}
+  ```
+
+* 返回结果
+
+  ```json
+  {
+      "code": 200, #状态码，200为成功，-1为失败。
+      "msg": "OK", #执行信息。code=200时，msg为OK。code=-1时，msg为错误信息。
+      "data": [ #code=200时才有数据，code=-1时为空，可以不用管。
+          "Jay Chou",
+    			"Jackie Chan",
+    			"Defined by me"
+      ]
+  }
+  ```
 
 ### bots/create - 创建机器人
 
@@ -124,7 +148,7 @@ local_database = {
   		"user_id":1,
   		"chatbot_name":"Bot-1",
   		"chatbot_type": 0, # 0表示普通机器人，1表示cosplay机器人。
-  		"chatbot_persona": "Jackie Chan" # chatbot_type=1时传入。
+  		"chatbot_persona": "Jay Chou" # chatbot_type=1时传入。
   }
   ```
 

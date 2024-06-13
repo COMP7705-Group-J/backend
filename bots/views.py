@@ -9,6 +9,18 @@ import time
 GENERAL = 0
 CUSTOMIZABLE = 1
 
+persona = [
+    "Jay Chou",
+    "Jackie Chan",
+    "Defined by me"
+]
+
+
+def get_persona(request):
+    return JsonResponse({"code": 200,
+                         "msg": "OK",
+                         "data": persona})
+
 
 def create(request):
     data = request.POST
