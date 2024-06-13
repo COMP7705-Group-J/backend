@@ -48,6 +48,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = {
             'code': 200,
             'msg': 'OK',
+            'user_id': self.user.id,
             'username': self.user.username,
             'email': self.user.email,
             'access': old_data['access'],

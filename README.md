@@ -288,6 +288,7 @@ username, email, refresh and access tokens in string types if success
 {
     "code": 200,
     "msg": "OK",
+    "user_id": "...",
     "username": "...",
     "email": "...",
     "access": "...",
