@@ -10,9 +10,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-def get_api_key():
-    with open("openai_key.txt", "r", encoding="utf-8") as fin:
-        return fin.readline().strip().replace("/n", "")
+from LTM import get_api_key
 
 def list_chat(request):
     user_id = request.GET.get("user_id")
@@ -46,8 +44,6 @@ def loadhistory(request):
 # @authentication_classes([JWTAuthentication])
 # @permission_classes([IsAuthenticated])
 def newchat(request):
-    # todo:加下filter或者其他的东西避免注入
-    # 5/22 update:真的有必要吗，这个玩意好像就是参数化了
     input = request.POST.get("input")
     user_id = request.POST.get("user_id")
     chatbot_id = request.POST.get("chatbot_id")  
@@ -55,8 +51,8 @@ def newchat(request):
         cursor.execute("select content, by_user, create_at from Chat_history where user_id = %s and chatbot_id = %s Order By create_at", [user_id,chatbot_id])
         row = cursor.fetchall()
     history_chat = []
-    system_info = "consider the history chat content and give the correspond answer"
-    history_chat.append({"role": "system", "content" : system_info})
+    generator_prompt = "consider the history chat content and give the correspond answer"
+    history_chat.append({"role": "system", "content" : generator_prompt})
     for i in range(len(row)):
         if row[i][1]:
             history_chat.append({"role": "user", "content" : row[i][0]})
