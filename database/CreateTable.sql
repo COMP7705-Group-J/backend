@@ -27,3 +27,11 @@ create Table Chat_history(
     content longtext,
     by_user bool
 );
+
+drop table if exists Prompt;
+create Table Prompt(
+    user_id int REFERENCES User(user_id),
+    chatbot_id int REFERENCES ChatBot(chatbot_id),
+    prompt_name varchar(255),
+    prompt_content longtext
+);
