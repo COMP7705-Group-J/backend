@@ -11,7 +11,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .LTM import *
+from .LTM_hunyuan import *
+import datetime
 
 import sys
 sys.path.append("./")
@@ -56,19 +57,30 @@ def newchat(request):
     #print("history_chat", history_chat)
     
     api_key = get_api_key()
-    client = OpenAI(api_key=api_key)
+    # client = OpenAI(api_key=api_key)
+    httpProfile = HttpProfile()
+    httpProfile.endpoint = "hunyuan.tencentcloudapi.com"
+
+    clientProfile = ClientProfile()
+    clientProfile.httpProfile = httpProfile
+    client = hunyuan_client.HunyuanClient(api_key, "ap-guangzhou", clientProfile)
+    req = models.ChatCompletionsRequest()
 
     # prompt = "User: {}\nChatGPT: ".format(input)
     # history_chat = [{"role": "user", "content": prompt}]
     # chatGPT_input.append({"role": "user", "content": prompt})
-    history_chat.append({"role": "user", "content": input})
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
-        seed=1,
-        messages=history_chat
-    )
+    time_info = "Time: " + str(datetime.datetime.now()) + "\n"
+    history_chat.append({"Role": "user", "Content": time_info + input})
 
-    output = response.choices[0].message.content
+    params = {
+        "Model": "hunyuan-standard",
+        "Messages": history_chat
+    }
+
+    req.from_json_string(json.dumps(params))
+    response = client.ChatCompletions(req)
+
+    output = response.Choices[0].Message.Content
     # output = "Hello, everlyn. How is today going?"
 
     with connection.cursor() as cursor:
