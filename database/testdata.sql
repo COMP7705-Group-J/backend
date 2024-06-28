@@ -15,3 +15,6 @@ values (1,2,NOW()+3,"test data2", 1);
 
 insert into Chat_history
 values (1,2,NOW()+4,"test data3", 0);
+
+insert into Prompt
+values (1,1,"last_summary","");
