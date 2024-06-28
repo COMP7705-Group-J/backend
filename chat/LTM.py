@@ -42,6 +42,19 @@ generator_prompt = "consider the history chat content and give the correspond an
                    "\n" \
                    "Summary:{last_summary}"
 
+time_prompt = "Each user input will have a time information embedded in the front labelled by \"Time: \". If the time difference between \
+            two consecutive inputs exceeds a certain threshold (e.g., 10 minutes), respond with concern or curiosity. \
+            Use friendly and empathetic language. For example:\
+            If the time gap is more than 10 minutes but less than 30 minutes:\
+            \"I noticed it has been a little while since your last message. Is everything okay?\"\
+            If the time gap is more than 30 minutes but less than an hour:\
+            \"It's been a bit since we last talked. Did something come up?\"\
+            If the time gap is more than an hour:\
+            \"It's been a while since we last chatted. What have you been up to?\"\
+            If the time gap is up to several days:\
+            \"Long time no see! How do you do?\"\
+            Make sure to adapt your tone to be warm and considerate, ensuring the user feels supported and not pressured."
+
 
 def get_api_key():
     with open("openai_key.txt", "r", encoding="utf-8") as fin:
@@ -60,7 +73,7 @@ def get_history_chat(user_id, chatbot_id, summary):
     history_chat.append({"role": "system", "content": generator_prompt})
     for i in range(len(row)):
         if row[i][1]:
-            history_chat.append({"role": "user", "content": row[i][0]})
+            history_chat.append({"role": "user", "content": "Time: " + str(row[i][2]) + '\n' + row[i][0]})
         else:
             history_chat.append({"role": "assistant", "content": row[i][0]})
     return history_chat
@@ -106,7 +119,7 @@ def generate_user_persona(conversions):
     client = OpenAI(api_key=api_key)
 
     messages = []
-    messages.append({"role": "system", "content": user_persona_prompt})
+    messages.append({"role": "system", "content": user_persona_prompt + time_prompt})
     # messages.append({"role": "user", "content" : user_input})
     # messages.append({"role": "assistant", "content" : user_output})
 

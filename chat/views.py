@@ -54,7 +54,7 @@ def newchat(request):
     summary = get_last_summary(user_id, chatbot_id)
     history_chat = get_history_chat(user_id, chatbot_id, summary)
     #print("history_chat", history_chat)
-    '''
+    
     api_key = get_api_key()
     client = OpenAI(api_key=api_key)
 
@@ -68,8 +68,8 @@ def newchat(request):
         messages=history_chat
     )
 
-    output = response.choices[0].message.content'''
-    output = "Hello, everlyn. How is today going?"
+    output = response.choices[0].message.content
+    # output = "Hello, everlyn. How is today going?"
 
     with connection.cursor() as cursor:
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 1);", [user_id, chatbot_id, input])
