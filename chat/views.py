@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
+import datetime
 
 from LTM import get_api_key
 
@@ -55,16 +56,18 @@ def newchat(request):
     history_chat.append({"role": "system", "content" : generator_prompt})
     for i in range(len(row)):
         if row[i][1]:
-            history_chat.append({"role": "user", "content" : row[i][0]})
+            history_chat.append({"role": "user", "content" : "Time: " + row[i][2] + '\n' + row[i][0]})
         else:
             history_chat.append({"role": "assistant","content" : row[i][0]})
     api_key = get_api_key()
     client = OpenAI(api_key=api_key)
 
+    # get time
+    time_info = "Time: " + datetime.datetime.now() + "\n"
     # prompt = "User: {}\nChatGPT: ".format(input)
     # history_chat = [{"role": "user", "content": prompt}]
     # chatGPT_input.append({"role": "user", "content": prompt})
-    history_chat.append({"role": "user", "content": input})
+    history_chat.append({"role": "user", "content": time_info + input})
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
         seed=1,
