@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.db import connection
+import threading
 import openai
 from openai import OpenAI
 # Create your views here.
@@ -11,7 +12,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 import datetime
 
-from LTM import get_api_key
+from .LTM import *
+
+import sys
+sys.path.append("./")
 
 def list_chat(request):
     user_id = request.GET.get("user_id")
@@ -47,18 +51,12 @@ def loadhistory(request):
 def newchat(request):
     input = request.POST.get("input")
     user_id = request.POST.get("user_id")
-    chatbot_id = request.POST.get("chatbot_id")  
-    with connection.cursor() as cursor:
-        cursor.execute("select content, by_user, create_at from Chat_history where user_id = %s and chatbot_id = %s Order By create_at", [user_id,chatbot_id])
-        row = cursor.fetchall()
-    history_chat = []
-    generator_prompt = "consider the history chat content and give the correspond answer"
-    history_chat.append({"role": "system", "content" : generator_prompt})
-    for i in range(len(row)):
-        if row[i][1]:
-            history_chat.append({"role": "user", "content" : "Time: " + row[i][2] + '\n' + row[i][0]})
-        else:
-            history_chat.append({"role": "assistant","content" : row[i][0]})
+
+    chatbot_id = request.POST.get("chatbot_id")
+    summary = get_last_summary(user_id, chatbot_id)
+    history_chat = get_history_chat(user_id, chatbot_id, summary)
+    #print("history_chat", history_chat)
+    '''
     api_key = get_api_key()
     client = OpenAI(api_key=api_key)
 
@@ -74,11 +72,16 @@ def newchat(request):
         messages=history_chat
     )
 
-    output = response.choices[0].message.content
+    output = response.choices[0].message.content'''
+    output = "Hello, everlyn. How is today going?"
 
     with connection.cursor() as cursor:
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 1);", [user_id, chatbot_id, input])
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id, chatbot_id, output])
+
+    #异步更新总结
+    thread = threading.Thread(target=do_summary, args=(user_id, chatbot_id, summary, history_chat))
+    thread.start()
 
     return JsonResponse({"code":200,
                          "msg":"ok",
