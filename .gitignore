@@ -1,4 +1,5 @@
 openai_key.txt
+hunyuan_ket.txt
 .idea/
 chatbot_backend/__pycache__/
 chat/__pycache__/

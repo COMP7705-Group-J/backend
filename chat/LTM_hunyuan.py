@@ -63,7 +63,6 @@ time_prompt = "Each user input will have a time information embedded in the fron
             Make sure to adapt your tone to be warm and considerate, ensuring the user feels supported and not pressured."
 
 
-
 def get_api_key():
     with open("hunyuan_key.txt", "r", encoding="utf-8") as fin:
         credentials = json.load(fin)
@@ -71,6 +70,7 @@ def get_api_key():
         secret_key = credentials["SecretKey"]
         cred = credential.Credential(secret_id, secret_key)
     return cred
+
 
 def get_history_chat(user_id, chatbot_id, summary):
     with connection.cursor() as cursor:
@@ -107,20 +107,39 @@ def do_summary(user_id, chatbot_id, last_summary, chat_history):
     prompt = summarizer_prompt.format(chat_history=parsed_history, last_summary=last_summary)
     messages = [
         {
-            "Role": "system",
-            "content": ""
-        },
-        {
             "Role": "user",
-            "content": prompt
+            "Content": prompt
         }
     ]
 
-    # TODO do summary
-    updated_summary = "test3"
+    updated_summary = chat_completion(messages)
+    #print("new summary", updated_summary)
     with connection.cursor() as cursor:
         cursor.execute("update Prompt set prompt_content=%s where user_id=%s and chatbot_id=%s and prompt_name=%s;",
                        [updated_summary, user_id, chatbot_id, "last_summary"])
+
+
+def chat_completion(messages):
+    api_key = get_api_key()
+    httpProfile = HttpProfile()
+    httpProfile.endpoint = "hunyuan.tencentcloudapi.com"
+
+    clientProfile = ClientProfile()
+    clientProfile.httpProfile = httpProfile
+    client = hunyuan_client.HunyuanClient(api_key, "ap-guangzhou", clientProfile)
+    req = models.ChatCompletionsRequest()
+
+    params = {
+        "Model": "hunyuan-standard",
+        "Messages": messages
+    }
+
+    req.from_json_string(json.dumps(params))
+    response = client.ChatCompletions(req)
+
+    output = response.Choices[0].Message.Content
+
+    return output
 
 
 def generate_user_persona(conversions):
