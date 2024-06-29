@@ -151,9 +151,14 @@ def do_persona(user_id, chatbot_id):
         last_persona = cursor.fetchall()
 
     persona = generate_user_persona(conversions, last_persona)
-    with connection.cursor() as cursor:
-        cursor.execute("update Prompt set prompt_content=%s where user_id=%s and chatbot_id=%s and prompt_name=%s;",
-                       [persona, user_id, chatbot_id, "persona"])
+    if(len(last_persona)>0):
+        with connection.cursor() as cursor:
+            cursor.execute("update Prompt set prompt_content=%s where user_id=%s and chatbot_id=%s and prompt_name=%s;",
+                            [persona, user_id, chatbot_id, "persona"])
+    else:
+        with connection.cursor() as cursor:
+            cursor.execute("insert into Prompt values (%s,%s, %s,%s);",
+                            [user_id, chatbot_id, "persona", persona])
 
 def chat_completion(messages):
     api_key = get_api_key()
