@@ -53,7 +53,13 @@ def newchat(request):
     user_id = request.POST.get("user_id")
     chatbot_id = request.POST.get("chatbot_id")
     summary = get_last_summary(user_id, chatbot_id)
-    history_chat = get_history_chat(user_id, chatbot_id, summary)
+    
+    history_chat = get_history_chat(user_id, chatbot_id)
+    generator_prompt.format(last_summary=summary)
+    current_persona = get_current_persona(user_id, chatbot_id)
+    persona_prompt = user_persona_prompt.format(current_persona = current_persona)
+    history_chat.insert(0,{"Role": "system", "Content": generator_prompt + persona_prompt})
+
     #print("history_chat", history_chat)
     
     api_key = get_api_key()
@@ -88,8 +94,11 @@ def newchat(request):
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id, chatbot_id, output])
 
     #异步更新总结
-    thread = threading.Thread(target=do_summary, args=(user_id, chatbot_id, summary, history_chat))
-    thread.start()
+    thread_summary = threading.Thread(target=do_summary, args=(user_id, chatbot_id, summary, history_chat))
+    thread_summary.start()
+
+    thread_persona = threading.Thread(target=do_persona, args=(user_id, chatbot_id))
+    thread_persona.start()
 
     return JsonResponse({"code":200,
                          "msg":"ok",
