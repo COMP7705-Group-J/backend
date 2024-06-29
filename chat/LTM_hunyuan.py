@@ -20,7 +20,7 @@ summarizer_prompt = "You need to summarize the import information from the follo
                     " c. Habits: User's lifestyle, preference and so on.\n" \
                     "d. Interesting details: Interesting or special details, could be an vivid expression, a unique " \
                     "   hobby or an example to show user's personality.\n" \
-                    "2. You are the assistant. When you output, \"you\" represents the assistant.\n" \
+                    "2. You are the assistant. When you output, use \"you\" to replace the assistant.\n" \
                     "3. Just output an empty string if no information about user is provided.\n" \
                     "4. Briefly output the result. Don't be redundant. Directly output the result. Don't classify the result.\n" \
                     "5. Combine with the past summary between the user and the assistant, generate the complete " \
@@ -54,8 +54,9 @@ generator_prompt = "You are a good friend of the user. You should care about the
                    "When reacting to user's query, you should following these rules:\n" \
                    "1. If the information mentioned by the user is appeared in the summary, you should answer basing on the summary.\n" \
                    "2. You are not an AI. You are not a robot. You are not machine. You are human and you are a friend of the user.\n" \
+                   "3. Don't send any emoj.\n" \
                    "\n" \
-                   "Summary:{last_summary}"
+                   "Summary:{last_summary}\n"
 
 
 
@@ -130,10 +131,14 @@ def do_summary(user_id, chatbot_id, last_summary, chat_history):
     ]
 
     updated_summary = chat_completion(messages)
-    #print("new summary", updated_summary)
-    with connection.cursor() as cursor:
-        cursor.execute("update Prompt set prompt_content=%s where user_id=%s and chatbot_id=%s and prompt_name=%s;",
+    print("new summary", updated_summary)
+    if last_summary != None and len(last_summary)>0:
+        with connection.cursor() as cursor:
+            cursor.execute("update Prompt set prompt_content=%s where user_id=%s and chatbot_id=%s and prompt_name=%s;",
                        [updated_summary, user_id, chatbot_id, "last_summary"])
+    else:
+        with connection.cursor() as cursor:
+            cursor.execute("insert into Prompt values (%s,%s, %s,%s);", [user_id, chatbot_id, "last_summary", updated_summary])
 
 
 def do_persona(user_id, chatbot_id):

@@ -53,12 +53,12 @@ def newchat(request):
     user_id = request.POST.get("user_id")
     chatbot_id = request.POST.get("chatbot_id")
     summary = get_last_summary(user_id, chatbot_id)
-    
+    print("summary is", summary)
     history_chat = get_history_chat(user_id, chatbot_id)
-    generator_prompt.format(last_summary=summary)
+    update_prompt = generator_prompt.format(last_summary=summary)
     current_persona = get_current_persona(user_id, chatbot_id)
     persona_prompt = user_persona_prompt.format(current_persona = current_persona)
-    history_chat.insert(0,{"Role": "system", "Content": generator_prompt + persona_prompt})
+    history_chat.insert(0,{"Role": "system", "Content": update_prompt + persona_prompt})
 
     #print("history_chat", history_chat)
     
@@ -82,13 +82,11 @@ def newchat(request):
         "Model": "hunyuan-standard",
         "Messages": history_chat
     }
-
+    #print(history_chat)
     req.from_json_string(json.dumps(params))
     response = client.ChatCompletions(req)
-
     output = response.Choices[0].Message.Content
     # output = "Hello, everlyn. How is today going?"
-
     with connection.cursor() as cursor:
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 1);", [user_id, chatbot_id, input])
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id, chatbot_id, output])
