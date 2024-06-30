@@ -329,7 +329,7 @@ or if the username already exists:
 
 `GET` to retrieve the user's information
 
-`PATCH` or `PUT` to update the information
+`PATCH` to update the information
 * request header plus:
 ```shell
 key = Authorization

@@ -58,8 +58,18 @@ class CustomModelViewSet(viewsets.ModelViewSet):
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         
+        # return CustomResponse(
+        #     data=serializer.data,
+        #     code=200,
+        #     msg='OK',
+        #     status=status.HTTP_200_OK
+        # )
+
         return CustomResponse(
-            data=serializer.data,
+            data={
+                'username': serializer.data['username'],
+                'email': serializer.data['email']
+            },
             code=200,
             msg='OK',
             status=status.HTTP_200_OK

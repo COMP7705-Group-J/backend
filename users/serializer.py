@@ -32,9 +32,15 @@ class MyUserUpdateSerializer(serializers.ModelSerializer):
         }
     )
 
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
+
     class Meta:
         model=MyUser
-        fields=('username', 'email')
+        fields=('username', 'email', 'password')
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
