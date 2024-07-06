@@ -58,7 +58,7 @@ def newchat(request):
     update_prompt = generator_prompt.format(last_summary=summary)
     current_persona = get_current_persona(user_id, chatbot_id)
     persona_prompt = user_persona_prompt.format(current_persona = current_persona)
-    history_chat.insert(0,{"Role": "system", "Content": update_prompt + persona_prompt})
+    history_chat.insert(0,{"Role": "system", "Content": update_prompt + persona_prompt + time_prompt})
 
     #print("history_chat", history_chat)
     
