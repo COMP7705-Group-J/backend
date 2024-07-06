@@ -25,7 +25,14 @@ local_database = {
 }
 ```
 
-
+## 启动server
+```shell
+python manage.py migrate
+[
+python manage.py runserver                       ## Terminal
+nohup python manage.py runserver 0.0.0.0:8000&   ## Background
+]
+```
 
 ## chat 模块
 ### 历史记录

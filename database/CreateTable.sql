@@ -1,14 +1,14 @@
 drop table if exists User;
-create Table User(
-    user_id int primary key,
-    username varchar(255),
-    email varchar(255),
-    password varchar(255),
-    created_at timestamp,
-    updated_at timestamp
-);
+-- create Table User(
+--     user_id int primary key,
+--     username varchar(255),
+--     email varchar(255),
+--     password varchar(255),
+--     created_at timestamp,
+--     updated_at timestamp
+-- );
 
-drop table if exists Chatbot;
+drop table if exists ChatBot;
 create Table ChatBot(
     user_id int REFERENCES User(user_id),
     chatbot_id int,

@@ -147,7 +147,7 @@ def do_persona(user_id, chatbot_id):
     conversions = get_history_chat(user_id, chatbot_id)
 
     with connection.cursor() as cursor:
-        cursor.execute("select prompt_content from prompt where user_id=%s and chatbot_id=%s and prompt_name=%s;",
+        cursor.execute("select prompt_content from Prompt where user_id=%s and chatbot_id=%s and prompt_name=%s;",
                        [user_id, chatbot_id, "persona"])
         last_persona = cursor.fetchall()
 
