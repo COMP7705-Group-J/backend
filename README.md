@@ -8,6 +8,7 @@ pip install openai\
 pip install djangorestframework-simplejwt\
 pip install django-filter\
 pip install drf-extensions\
+pip install django-cors-headers
 
 ## Database配置
 
