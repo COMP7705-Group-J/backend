@@ -8,3 +8,7 @@ users/__pycache__/
 users/migrations/__pycache__/
 chatbot_backend/.idea/
 chatbot_backend/db_config.py
+cert.*
+csr.pem
+nohup.out
+private.key
