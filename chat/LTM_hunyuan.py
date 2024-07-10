@@ -75,6 +75,8 @@ time_prompt = "Each user input will have a time information embedded in the fron
             Make sure to adapt your tone to be warm and considerate, ensuring the user feels supported and not pressured."
 
 
+chatbot_persona_prompt = "The user has defined you to behave like {persona}, please act like this"
+
 def get_api_key():
     with open("hunyuan_key.txt", "r", encoding="utf-8") as fin:
         credentials = json.load(fin)
@@ -132,7 +134,7 @@ def do_summary(user_id, chatbot_id, last_summary, chat_history):
     ]
 
     updated_summary = chat_completion(messages)
-    print("new summary", updated_summary)
+    # print("new summary", updated_summary)
     if last_summary != None and len(last_summary)>0:
         with connection.cursor() as cursor:
             cursor.execute("update Prompt set prompt_content=%s where user_id=%s and chatbot_id=%s and prompt_name=%s;",
@@ -210,3 +212,14 @@ def generate_user_persona(conversions, last_persona):
     response = client.ChatCompletions(req)
     output = response.Choices[0].Message.Content
     return output
+
+
+def get_chatbot_persona(user_id, chatbot_id):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "select chatbot_persona from Chatbot where user_id = %s and chatbot_id = %s",
+            [user_id, chatbot_id])
+        row = cursor.fetchall()
+    if(len(row)==0):
+        return None
+    return row[0]

@@ -52,13 +52,14 @@ def newchat(request):
     input = request.POST.get("input")
     user_id = request.POST.get("user_id")
     chatbot_id = request.POST.get("chatbot_id")
-    summary = get_last_summary(user_id, chatbot_id)
-    print("summary is", summary)
+    
+    # print("summary is", summary)
     history_chat = get_history_chat(user_id, chatbot_id)
-    update_prompt = generator_prompt.format(last_summary=summary)
-    current_persona = get_current_persona(user_id, chatbot_id)
-    persona_prompt = user_persona_prompt.format(current_persona = current_persona)
-    history_chat.insert(0,{"Role": "system", "Content": time_prompt + update_prompt + persona_prompt})
+    summary = get_last_summary(user_id, chatbot_id)
+    update_prompt = generator_prompt.format(last_summary = summary)
+    persona_prompt = user_persona_prompt.format(current_persona = get_current_persona(user_id, chatbot_id))
+    chatbot_persona = chatbot_persona_prompt.format(persona = get_chatbot_persona(user_id, chatbot_id))
+    history_chat.insert(0,{"Role": "system", "Content": time_prompt + update_prompt + persona_prompt + chatbot_persona})
 
     #print("history_chat", history_chat)
     
@@ -91,7 +92,7 @@ def newchat(request):
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 1);", [user_id, chatbot_id, input])
         cursor.execute("insert into Chat_history values (%s,%s,NOW(),%s, 0);", [user_id, chatbot_id, output])
 
-    #异步更新总结
+    # 异步更新总结
     thread_summary = threading.Thread(target=do_summary, args=(user_id, chatbot_id, summary, history_chat))
     thread_summary.start()
 
