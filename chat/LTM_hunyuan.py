@@ -217,7 +217,7 @@ def generate_user_persona(conversions, last_persona):
 def get_chatbot_persona(user_id, chatbot_id):
     with connection.cursor() as cursor:
         cursor.execute(
-            "select chatbot_persona from Chatbot where user_id = %s and chatbot_id = %s",
+            "select chatbot_persona from ChatBot where user_id = %s and chatbot_id = %s",
             [user_id, chatbot_id])
         row = cursor.fetchall()
     if(len(row)==0):
