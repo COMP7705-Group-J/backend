@@ -62,9 +62,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://zinghhh.github.io",
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'chatbot_backend.urls'
 
